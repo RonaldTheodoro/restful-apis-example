@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="mt-5">Oxford Dictionary</h1>
+
+    <form method="GET" class="form">
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary btn-block">
+            Search
+        </button>
+    </form>
+
+    {% if search_result %}
+        <hr/>
+        {% if search_result.success %}
+            {% for result in search_result.results %}
+                <h2>{{ result.word }}</h2>
+                {% for lexicalentry in result.lexicalEntries %}
+                    <h3>{{ lexicalentry.lexicalCategory }}</h3>
+                    <ul>
+                        {% for entry in lexicalentry.entries %}
+                            {% for sense in entry.senses %}
+                                {% for definition in sense.definitions %}
+                                    <li>{{ definition }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                {% endfor %}
+            {% endfor %}
+        {% else %}
+            <p><em>{{ search_result.message }}</em></p>
+        {% endif %}
+    {% endif %}
+{% endblock content %}
